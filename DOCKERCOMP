@@ -1,0 +1,52 @@
+version: '3.10'
+
+  services:
+    task_service:
+      build: .
+      ports:
+        - 8080:80
+      restart: always
+      environment:
+        - POSTGRES_URL=postgresql://postgres:postgres@localhost:5432/taskm
+        - AMQP_URL=amqp://guest:guest123@51.250.26.59:5672/
+  db:
+    image: postgres:15.2
+    restart: always
+    container_name: task_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+  web:
+    container_name: task_service
+    build:
+      context: .
+    volumes:
+      - static_volume:/code/static
+      - media_volume:/code/media
+    env_file:
+      - .env
+    depends_on:
+      - db
+    links:
+      - db
+    networks:
+      - service_network
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    networks:
+      - service_network
+
+networks:
+  service_network:
+    driver: bridge
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
