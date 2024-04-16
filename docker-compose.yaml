@@ -1,9 +1,9 @@
-version: '3'
+version: '3.10'
 services:
   db:
     image: postgres:15.2
     restart: always
-    container_name: character_db
+    container_name: task_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -16,8 +16,7 @@ services:
       - service_network
   web:
     container_name: task_service
-    build:
-      context: .
+    build: .
     ports:
       - 8000:80
     volumes:
