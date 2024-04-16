@@ -16,7 +16,7 @@ async def process_created_task(msg: IncomingMessage):
      task = Task(
          id=UUID(data['id']),
          name=data['name'],
-         task_user=data['id']
+         task_user=UUID(data['id'])
      )
      repo = TaskRepo()
      created_task = repo.create_task(task)

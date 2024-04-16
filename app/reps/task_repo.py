@@ -5,7 +5,7 @@ from uuid import UUID, uuid4
 from app.database import get_db
 from app.models.task_m import Task
 from app.models.user_m import User
-from app.schemas.character import Character as DBCharacter
+from app.schems.task_s import Task as DBTask
 
 class TaskRepo:
   db: Session

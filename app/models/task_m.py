@@ -13,5 +13,5 @@ class Task (BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id:UUID
     name:str
-    task_user:User | None = None
+    task_user:UUID | None = None
 

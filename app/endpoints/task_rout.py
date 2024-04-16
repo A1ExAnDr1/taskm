@@ -6,7 +6,7 @@ from app.services.task_serv import TaskServ
 
 
 
-tasks_router = APIRouter(prefix='/tasks', tags=['TASKS'])
+tasks_router = APIRouter(prefix='/tasks')
 
 tasks_service = Annotated[TaskServ, Depends(TaskServ)]
 
