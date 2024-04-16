@@ -9,7 +9,7 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 COPY ./app /code/app
 
 # Копирование файлов alembic
-COPY ./migs /code/migs
+COPY ./migrations /code/migrationss
 COPY ./alembic.ini /code/alembic.ini
 COPY ./entrypoint.sh /code/entrypoint.sh
 
