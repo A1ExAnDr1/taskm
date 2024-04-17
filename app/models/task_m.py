@@ -5,13 +5,9 @@ from pydantic import BaseModel, ConfigDict
 from app.models.user_m import User
 
 
-
-
-
-
 class Task (BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id:UUID
     name:str
-    task_user:UUID | None = None
+    task_user:UUID
 

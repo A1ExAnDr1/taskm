@@ -7,4 +7,4 @@ class Task(Base):
 
    id = Column(UUID(as_uuid=True), primary_key=True, index=True)
    name = Column(String)
-   task_user =Column(UUID(as_uuid=True), ForeignKey("users.id"))
+   task_user =Column(UUID(as_uuid=True))
