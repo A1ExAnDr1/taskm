@@ -43,7 +43,7 @@ class TaskRepo:
           # You may want to handle this scenario differently based on your requirements
           raise KeyError("Task not found with the provided ID")
 
-  def delete_task_by_id(self, id: UUID) -> Task:
+  def delete_task_by_id(self, id: UUID) -> None:
       db_task = self.db.query(DBTask).filter_by(id=id).first()
       if db_task:
           self.db.delete(db_task)
