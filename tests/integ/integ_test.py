@@ -3,6 +3,11 @@ from app.models.task_m import Task
 from app.reps.task_repo import TaskRepo
 import uuid
 
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+sys.path.append(str(BASE_DIR))
+sys.path.append(str(BASE_DIR / 'app/services'))
+#sys.path.append(str(BASE_DIR / 'movies_service/app'))
 def test_task_repo():
  repo = TaskRepo()
  tasks = repo.get_tasks()
