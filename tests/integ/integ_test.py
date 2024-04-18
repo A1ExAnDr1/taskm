@@ -2,7 +2,6 @@ import sys
 import pytest
 import uuid
 from pathlib import Path
-from app.services.task_serv import TaskServ
 from typing import Annotated
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -11,9 +10,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 sys.path.append(str(BASE_DIR))
 sys.path.append(str(BASE_DIR / 'app/services'))
 
+from fastapi import Depends
 from app.models.task_m import Task
 from app.reps.task_repo import TaskRepo
-
+from app.services.task_serv import TaskServ
 def test_task_repo():
   repo = Annotated[TaskServ, Depends(TaskServ)]
   tasks = repo.get_tasks()
