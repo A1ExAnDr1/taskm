@@ -55,7 +55,7 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          cd app/services/ && docker build -f Dockerfile . --tag cr.yandex/${{ secrets.YC_REGISTRY_ID }}/ms-task-services:latest --platform=linux/amd64
+          docker build . --file Dockerfile --tag cr.yandex/${{ secrets.YC_REGISTRY_ID }}/ms-task-services:latest 
 
       - name: Login to Yandex Cloud
         uses: docker/login-action@v3.0.0
