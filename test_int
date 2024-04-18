@@ -26,3 +26,4 @@ def test_task_repo():
   assert isinstance(task.id, uuid.UUID)
   assert task.name == 'test'
   assert isinstance(task.task_user, uuid.UUID)
+  #
