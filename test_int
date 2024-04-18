@@ -4,7 +4,11 @@ import uuid
 from pathlib import Path
 from typing import Annotated
 
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+
+sys.path.append(str(BASE_DIR))
+sys.path.append(str(BASE_DIR / 'app/services'))
 
 from fastapi import Depends
 from app.models.task_m import Task
@@ -15,8 +19,8 @@ from app.database import get_db
 
 
 def test_task_repo():
-  repo = TaskRepo()
-  tasks = repo.get_tasks()
+  repo = Annotated[TaskServ, Depends(TaskServ)]
+  tasks = repo.get_tasks(self)
   assert isinstance(tasks, list)
   task = repo.create_task(Task(id=str(uuid.uuid4()), name='test', task_user=str(uuid.uuid4())))
   assert isinstance(task.id, uuid.UUID)
