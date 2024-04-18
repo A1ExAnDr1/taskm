@@ -45,3 +45,13 @@ def delete_task_by_id(id: UUID, service: tasks_service):
         raise HTTPException(status_code=404, detail='Task not found')
     except:
         raise HTTPException(status_code=500, detail='An error occurred while deleting the task')
+@tasks_router.get('/tasks_by_name/{name}')
+def get_tasks_by_name(name: str, service: tasks_service):
+    try:
+        tasks = service.get_task_by_name(name)
+        if tasks:
+            return [task.dict() for task in tasks]
+        else:
+            raise HTTPException(status_code=404, detail='Tasks not found with the provided name')
+    except:
+        raise HTTPException(status_code=500, detail='Error occurred while fetching tasks by name')

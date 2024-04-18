@@ -43,10 +43,14 @@ class TaskRepo:
           # You may want to handle this scenario differently based on your requirements
           raise KeyError("Task not found with the provided ID")
 
-  def delete_task_by_id(self, id: UUID) -> None:
+  def delete_task_by_id(self, id: UUID) -> Task:
       db_task = self.db.query(DBTask).filter_by(id=id).first()
       if db_task:
           self.db.delete(db_task)
           self.db.commit()
       else:
           raise KeyError("Task not found with the provided ID")
+
+  def get_tasks_by_name(self, name: str) -> list[Task]:
+      db_tasks = self.db.query(DBTask).filter(DBTask.name == name).all()
+      return [self.__map_to_model(db_task) for db_task in db_tasks]

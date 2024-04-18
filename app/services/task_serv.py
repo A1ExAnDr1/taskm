@@ -16,5 +16,8 @@ class TaskServ:
     def get_task_by_id(self, id: UUID) -> Task:
         return self.task_repo.get_task_by_id(id)
 
-    def delete_task_by_id(self, id: UUID) -> None:
+    def delete_task_by_id(self, id: UUID) -> Task:
         return self.task_repo.delete_task_by_id(id)
+
+    def get_task_by_name(self, name: str) -> list[Task]:
+        return self.task_repo.get_tasks_by_name(name)
