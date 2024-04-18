@@ -4,11 +4,6 @@ import uuid
 from pathlib import Path
 from typing import Annotated
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
-
-
-sys.path.append(str(BASE_DIR))
-sys.path.append(str(BASE_DIR / 'app/services'))
 
 from fastapi import Depends
 from app.models.task_m import Task
