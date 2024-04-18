@@ -16,27 +16,32 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: install dependencies
+      - name: Prepare unit tests
         run: |
           sudo apt update
           sudo apt install -y python3-pip
-          pip install psycopg2-binary
-          pip install pytest
-          pip install pytest-asyncio
-          
-          pip install --no-cache-dir --upgrade -r requirements.txt
+          pip install -r requirements.txt
 
-      - name: Prepare for tests (compose up)
-        run: docker compose up -d --build
+      - name: Run unit tests
+        run: |
+          PYTHONPATH=. pytest ./tests/unit
 
-      - name: Run integration test
-        run: pytest tests/integ
+      - name: Prepare integration tests
+        run: |
+          sudo docker run --name pg-tests -e POSTGRES_PASSWORD=password -p 5432:5432 -d postgres:15.2
+          rm ./.env
+          echo "AMQP_URL=$AMQP_URL
+          POSTGRES_URL=$POSTGRES_URL
+          " > .env
+          sleep 5
+          alembic upgrade head
+        env:
+          AMQP_URL: amqp://guest:guest123@51.250.26.59:5672/
+          POSTGRES_URL: postgresql://postgres:password@localhost:5432/postgres
 
-      - name: Run component test
-        run: pytest tests/unit
-
-      - name: Clean up (compose down)
-        run: docker compose down
+      - name: Run integ tests
+        run: |
+          PYTHONPATH=. pytest ./tests/integ
 
   build_and_push_task_service:
     name: Build and push task service to Yandex Cloud
