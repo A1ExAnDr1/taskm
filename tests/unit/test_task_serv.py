@@ -1,7 +1,11 @@
 from app.models.task_m import Task
 from app.models.user_m import User
 import uuid
-
+from app.services.task_serv import TaskServ
+from app.reps.task_repo import TaskRepo
+from app.models.task_m import Task
+import uuid
+from unittest.mock import Mock
 def test_task_service():
  repo = Mock(spec=TaskRepo)
  service = TaskServ(repo)
