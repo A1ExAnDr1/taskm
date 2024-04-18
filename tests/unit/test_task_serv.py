@@ -10,6 +10,6 @@ def test_task_model():
 
 
 def test_user_model():
- user = Equipment(id=str(uuid.uuid4()), name='test')
+ user = User(id=str(uuid.uuid4()), name='test')
  assert isinstance(user.id, uuid.UUID)
  assert equipment.name == 'test'

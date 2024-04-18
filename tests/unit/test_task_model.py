@@ -13,7 +13,7 @@ def test_task_service():
  repo.create_task.return_value = task
  created_task = service.create_task(task)
 
- repo.get_characters.return_value = [created_task]
+ repo.get_tasks.return_value = [created_task]
  tasks = service.get_tasks()
 
  assert len(tasks) == 1
