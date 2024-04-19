@@ -1,6 +1,5 @@
 name: CI/CD pipeline
 
-
 on:
   push:
     branches:
@@ -16,27 +15,36 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: install dependencies
+      - name: Prepare unit tests
         run: |
           sudo apt update
           sudo apt install -y python3-pip
-          pip install psycopg2-binary
+          pip install -r requirements.txt
           pip install pytest
+          pip install psycopg2-binary
           pip install pytest-asyncio
-          
-          pip install --no-cache-dir --upgrade -r requirements.txt
+          pip install asyncpg
 
-      - name: Prepare for tests (compose up)
-        run: docker compose up -d --build
+      - name: Run unit tests
+        run: |
+          PYTHONPATH=. pytest ./tests/unit
 
-      - name: Run integration test
-        run: pytest tests/integ
+      - name: Prepare integration tests
+        run: |
+          sudo docker run --name pg-tests -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres:15.2
+          rm ./.env
+          echo "AMQP_URL=$AMQP_URL
+          POSTGRES_URL=$POSTGRES_URL
+          " > .env
+          sleep 5
+          alembic upgrade head
+        env:
+          AMQP_URL: amqp://guest:guest123@51.250.26.59:5672/
+          POSTGRES_URL: postgresql://postgres:postgres@localhost:5432/postgres
 
-      - name: Run component test
-        run: pytest tests/unit
-
-      - name: Clean up (compose down)
-        run: docker compose down
+      - name: Run integ tests
+        run: |
+          PYTHONPATH=. pytest ./tests/integ
 
   build_and_push_task_service:
     name: Build and push task service to Yandex Cloud
@@ -47,7 +55,7 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          cd app/services/ && docker build -f Dockerfile . --tag cr.yandex/${{ secrets.YC_REGISTRY_ID }}/ms-task-services:latest --platform=linux/amd64
+          docker build . --file Dockerfile --tag cr.yandex/${{ secrets.YC_REGISTRY_ID }}/ms-task-services:latest 
 
       - name: Login to Yandex Cloud
         uses: docker/login-action@v3.0.0
@@ -59,7 +67,6 @@ jobs:
       - name: Push tag to Yandex Cloud
         run: |
           docker push cr.yandex/${{ secrets.YC_REGISTRY_ID }}/ms-task-services:latest
-
 
   deploy:
     name: Deploy
@@ -77,3 +84,23 @@ jobs:
           revision-env: |
             POSTGRES_URL=${{ secrets.ENV_POSTGRES_URL }}
 
+
+  build_and_push_to_DH:
+      name: Build and push to DockerHub
+      runs-on: ubuntu-latest
+      needs: [ test ]
+      steps:
+        - uses: actions/checkout@v3
+
+        - name: Build Docker Image
+          run: |
+            docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/ms-task-services:latest
+        - name: Login to DockerHub
+          uses: docker/login-action@v3.0.0
+          with:
+            username: ${{ secrets.DOCKER_USERNAME }}
+            password: ${{ secrets.DOCKER_PASSWORD }}
+
+        - name: Push tag to docker hub
+          run: |
+            docker push ${{ secrets.DOCKER_USERNAME }}/ms-task-services:latest
