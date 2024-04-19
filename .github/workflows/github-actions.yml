@@ -46,7 +46,6 @@ jobs:
         run: |
           PYTHONPATH=. pytest ./tests/integ
 
- 
 
   build-and-push-to-dh:
     name: Build and push to DockerHub
