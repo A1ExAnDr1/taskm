@@ -46,27 +46,7 @@ jobs:
         run: |
           PYTHONPATH=. pytest ./tests/integ
 
-  build_and_push_task_service:
-    name: Build and push task service to Yandex Cloud
-    runs-on: ubuntu-latest
-    needs: [ test ]
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Build Docker Image
-        run: |
-          docker build . --file Dockerfile --tag cr.yandex/${{ secrets.YC_REGISTRY_ID }}/ms-task-services:latest 
-
-      - name: Login to Yandex Cloud
-        uses: docker/login-action@v3.0.0
-        with:
-          registry: cr.yandex
-          username: json_key
-          password: ${{ secrets.YC_KEYS }}
-
-      - name: Push tag to Yandex Cloud
-        run: |
-          docker push cr.yandex/${{ secrets.YC_REGISTRY_ID }}/ms-task-services:latest
+ 
 
   build-and-push-to-dh:
     name: Build and push to DockerHub
