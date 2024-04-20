@@ -20,7 +20,6 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
 
-    op.create_index(op.f('ix_users_id'), 'users', ['id'], unique=False)
     op.create_table('task',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('name', sa.String(), nullable=True),
