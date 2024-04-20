@@ -22,17 +22,17 @@ class LoggingMiddleware(BaseHTTPMiddleware):
         response: Response = await call_next(request)
     return response
 
-app.add_middleware(LoggingMiddleware)
+#app.add_middleware(LoggingMiddleware)
 
-loki_logs_handler = LokiQueueHandler(
- Queue(-1),
- url="http://loki:3100/loki/api/v1/push",
- tags={"application": "fastapi"},
- version="1",
-)
+#loki_logs_handler = LokiQueueHandler(
+ #Queue(-1),
+ #url="http://loki:3100/loki/api/v1/push",
+ #tags={"application": "fastapi"},
+# version="1",
+#)
 
-uvicorn_access_logger = logging.getLogger("uvicorn.access")
-uvicorn_access_logger.addHandler(loki_logs_handler)
+#uvicorn_access_logger = logging.getLogger("uvicorn.access")
+#uvicorn_access_logger.addHandler(loki_logs_handler)
 
 @app.on_event('startup')
 def startup():
