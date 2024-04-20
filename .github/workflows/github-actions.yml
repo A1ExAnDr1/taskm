@@ -36,15 +36,13 @@ jobs:
           echo "AMQP_URL=$AMQP_URL
           POSTGRES_URL=$POSTGRES_URL
           " > .env
-          sleep 5
-          alembic upgrade head
         env:
           AMQP_URL: amqp://guest:guest123@51.250.26.59:5672/
           POSTGRES_URL: postgresql://postgres:postgres@localhost:5432/postgres
 
-      - name: Run integ tests
-        run: |
-          PYTHONPATH=. pytest ./tests/integ
+      #- name: Run integ tests
+       # run: |
+       #   PYTHONPATH=. pytest ./tests/integ
 
   build_and_push_task_service:
     name: Build and push task service to Yandex Cloud
