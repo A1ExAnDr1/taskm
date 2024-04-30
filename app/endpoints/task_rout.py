@@ -4,7 +4,7 @@ from app.models.task_m import Task
 from app.models.user_m import User
 from app.services.task_serv import TaskServ
 from uuid import UUID
-
+import psycopg2
 
 tasks_router = APIRouter(prefix='/tasks')
 
