@@ -40,11 +40,11 @@ services:
       - db
     networks:
       - service_network
-  web_1:
-    container_name: serv_2
-    build: app/serv_s
-    ports:
-      - 8001:80
+#  web_1:
+#    container_name: serv_2
+#    build: app/serv_s
+#    ports:
+#      - 8001:80
 
   rabbitmq:
     image: rabbitmq:3-management
